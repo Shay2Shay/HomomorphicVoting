@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <script>
+        function updateResponse(msg) {
+            document.getElementById('response').textContent = msg
+        }
+
+        async function keyGEN() {
+            response = ""
+            email = document.getElementById('exampleInputEmail1').value
+            response += "Key Gen Triggered : " + email
+
+            URL = 'http://127.0.0.1:8000/dhke/' + email
+            res = await fetch(URL).then((data) => {return data.json()})
+            response += ` ----------------- sharedKey = ${res['sharedKey']}`
+
+            updateResponse(response)
+        }
+
+        async function saveDB() {
+            URL = 'http://127.0.0.1:8000/' + 'savedb'
+            await fetch(URL)
+        }
+    </script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container">
+            <a class="navbar-brand" href="/home.html">VOTER</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/Keygen.html">Keygen</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/authenticate.html">Authenticate</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/otp.html">OTP</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/vote.html">Vote</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/liveresults.html">Live Results</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container mt-5">
+        <h3>DHKE & AES Shared Key</h3>
+        <p>
+            In this component we utilised standard Deffie Hellman Key Exchange Protocol to generate 256 bit key. <br>
+            This key is used as shared key for secure communication using AES algorithm.
+        </p>
+        <hr>
+
+        <p>
+            Source: User Machine Sends
+        <ul>
+            <li>Registered Email</li>
+            <li>g (generator)</li>
+            <li>Public Key (Discrete Logarithom)</li>
+            <li>n (size of system)</li>
+        </ul>
+        Target: Reciver Machine Responds
+        <ul>
+            <li>Their Public Key</li>
+        </ul>
+        </p>
+        <br>
+        <hr>
+
+
+        <form class="container">
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            </div>
+            <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+            <div class="d-grid gap-2 mt-5">
+                <button class="btn btn-primary" type="button" onclick="keyGEN()">Click to generate Shared Key</button>
+            </div>
+        </form>
+
+        <br><br><br>
+        <hr>
+
+        <h5>Response from Server:</h5>
+        <div id="response">
+        
+        </div>
+        <hr>
+        <div class="d-grid gap-2 mt-5">
+            <button class="btn btn-primary" type="button" onclick="saveDB()">Save Keys</button>
+        </div>
+
+
+
+    </div>
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
